@@ -14,7 +14,7 @@ const TestComponent = () => {
         return () => {
             socket?.off('message');
         };
-    }, [socket]);
+    }, []);
 
     return (
         <div>

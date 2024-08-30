@@ -22,7 +22,7 @@ export const SocketProvider = ({ children }: any) => {
             connection.disconnect();
         };
 
-    }, [socket]);
+    }, []);
 
 
     return (
