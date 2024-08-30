@@ -21,9 +21,7 @@ export const SocketProvider = ({ children }: any) => {
         return () => {
             connection.disconnect();
         };
-
     }, []);
-
 
     return (
         <SocketContext.Provider value={socket}>
