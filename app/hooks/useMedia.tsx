@@ -9,13 +9,13 @@ export const useMedia = () => {
     const isStreamSet = useRef(false);
 
     useEffect(() => {
-        if (isStreamSet.current) {
-            return;
-        }
+        if (isStreamSet.current) return;
         isStreamSet.current = true;
 
         const fetchMedia = async (): Promise<void> => {
             try {
+                console.log("Requesting media stream...");
+
                 const stream = await navigator.mediaDevices.getUserMedia({
                     video: true,
                     audio: true,

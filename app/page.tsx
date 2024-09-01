@@ -14,12 +14,15 @@ export default function Home() {
 
   const createAndJoin = () => {
     const roomId = uuidv4();
-    router.push(`/${roomId}`); //since dynamic navigation
+    // const newRoomId = uuidv4();
+    router.push(`/${roomId}`);
+
   }
 
   const join = () => {
     if (roomId) {
       router.push(`/${roomId}`);
+
     }
     else {
       toast("Incorrect RoomID.");
@@ -29,7 +32,7 @@ export default function Home() {
     <div className="bg-black min-h-screen flex justify-center items-center border-black border-2">
       <ToastContainer />
       <div className="bg-blue-900 w-11/12 md:w-2/3 lg:w-1/3 h-1/2 flex flex-col justify-center items-center shadow-lg rounded-lg">
-        <h1 className="text-white text-3xl font-bold text-center p-4">Video Call</h1>
+        {/* <h1 className="text-white text-3xl font-bold text-center p-4">Video Call</h1> */}
         <div className="flex flex-col items-center mt-10 p-4">
           <input
             type="text"
