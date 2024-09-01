@@ -13,7 +13,6 @@ type VideoStreamType = {
         playing: boolean;
     };
 };
-// const Room = ({ params: { roomId } }: { params: { roomId: string } }) => {
 const Room = () => {
     const socket = useSocket();
     const { peer, myPeerId } = usePeer();
