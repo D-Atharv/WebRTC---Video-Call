@@ -5,6 +5,7 @@ import { usePeer } from "@/hooks/usePeer";
 import { useSocket } from "@/context/useSocket";
 import { useMedia } from "@/app/hooks/useMedia";
 import { VideoPlayer } from "../../components/VideoPlayer";
+import SideBar from "@/app/components/SideBar";
 
 type VideoStreamType = {
     [key: string]: {
@@ -19,6 +20,7 @@ const Room = () => {
     const { stream } = useMedia();
     const [videoStream, setVideoStream] = useState<VideoStreamType>({});
 
+    //handles the event when a new user connects
     useEffect(() => {
 
         if (!socket || !peer || !stream) return;
@@ -53,6 +55,7 @@ const Room = () => {
     }, [socket, peer, stream, setVideoStream]);
 
 
+    //a listener for incoming calls when another user calls your peer ID.
 
     useEffect(() => {
         if (!peer || !stream) return;
@@ -78,6 +81,7 @@ const Room = () => {
     }, [peer, stream, videoStream]);
 
 
+    //sets up your own stream and adds it to the videoStream
     useEffect(() => {
         if (!peer || !myPeerId) return;
         console.log(`setting my steam of peerId ${myPeerId}`);
@@ -103,22 +107,37 @@ const Room = () => {
 
     return (
         <>
-            <div className="flex flex-col items-center justify-center p-8 bg-gray-900 min-h-screen">
-                <h1 className="text-4xl font-semibold text-center text-white mb-8">Inside Room</h1>
-                {Object.keys(videoStream).map((videoStreamId: any) => {
-                    const { url, muted, playing } = videoStream[videoStreamId];
-                    return (
-                        <div
-                            key={videoStreamId}
-                            className="p-4 w-full max-w-2xl shadow-xl bg-gray-800 bg-opacity-80 backdrop-blur-sm rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-101"
-                        >
-                            <VideoPlayer key={videoStreamId} url={url} muted={muted} playing={playing} />
-                        </div>
-                    );
-                })}
+            <div className="flex p-8 bg-gray-900 min-h-screen">
+                <div className=" flex flex-row ">
+                    <SideBar
+                        iconPaths={[
+                            '/micOn.svg',
+                            '/micOff.svg',
+                            '/videoOn.svg',
+                            '/videOff.svg'
+                        ]}
+                    />
+                </div>
+                <div className="flex flex-col items-center w-full ">
+                    <h1 className="text-4xl font-semibold text-center text-white mb-8">Inside Room</h1>
+                    {Object.keys(videoStream).map((videoStreamId: any) => {
+                        const { url, muted, playing } = videoStream[videoStreamId];
+                        return (
+                            <div
+                                key={videoStreamId}
+                                className="p-2 mb-8 w-1/2 h-2/6 xl:h-2/5 max-w-2xl shadow-xl bg-gray-800 bg-opacity-80 backdrop-blur-sm rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-101"
+                            >
+                                <VideoPlayer key={videoStreamId} url={url} muted={muted} playing={playing} />
+                            </div>
+                        );
+                    })}
+                </div>
             </div>
+
         </>
     );
 }
 
 export default Room;
+
+
