@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { usePeer } from "@/hooks/usePeer";
 import { useSocket } from "@/context/useSocket";
 import { useMedia } from "@/app/hooks/useMedia";
-import { VideoPlayer } from "../components/VideoPlayer";
+import { VideoPlayer } from "@/app/components/VideoPlayer";
 
 type VideoStreamType = {
     [key: string]: {
