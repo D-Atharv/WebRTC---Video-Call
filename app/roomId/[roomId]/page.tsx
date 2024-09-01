@@ -34,7 +34,7 @@ const Room = () => {
 
                 setVideoStream((prev: any) => ({
                     ...prev,
-                    [myPeerId]: {
+                    [newUserId]: {
                         url: stream,
                         muted: false,
                         playing: true
@@ -66,7 +66,7 @@ const Room = () => {
                 console.log(`incoming streaming from other user peerId ${callerId}`);
                 setVideoStream((prev: any) => ({
                     ...prev,
-                    [myPeerId]: {
+                    [callerId]: {
                         url: stream,
                         muted: false,
                         playing: true
@@ -92,25 +92,33 @@ const Room = () => {
     }, [myPeerId, stream, setVideoStream])
 
     if (!stream) {
-        return <div>Loading stream, please wait...</div>;
+        return (
+            <div className="flex items-center justify-center h-screen bg-gray-900">
+                <div className="text-lg text-gray-200 bg-gray-800 py-3 px-6 rounded-lg shadow-lg animate-pulse">
+                    Loading stream, please wait...
+                </div>
+            </div>
+        );
     }
 
     return (
         <>
-            <div className="flex flex-col justify-center items-center p-8 bg-blue-400 h-screen">
-                <h1 className="text-3xl text-center">Inside Room</h1>
+            <div className="flex flex-col items-center justify-center p-8 bg-gray-900 min-h-screen">
+                <h1 className="text-4xl font-semibold text-center text-white mb-8">Inside Room</h1>
                 {Object.keys(videoStream).map((videoStreamId: any) => {
                     const { url, muted, playing } = videoStream[videoStreamId];
                     return (
-                        <div key={videoStreamId} className="p-4 ">
+                        <div
+                            key={videoStreamId}
+                            className="p-4 w-full max-w-2xl shadow-xl bg-gray-800 bg-opacity-80 backdrop-blur-sm rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-101"
+                        >
                             <VideoPlayer key={videoStreamId} url={url} muted={muted} playing={playing} />
                         </div>
-
-                    )
+                    );
                 })}
             </div>
         </>
-    )
+    );
 }
 
 export default Room;
