@@ -15,13 +15,13 @@ export default function Home() {
   const createAndJoin = () => {
     const roomId = uuidv4();
     // const newRoomId = uuidv4();
-    router.push(`/${roomId}`);
+    router.push(`/roomId/${roomId}`);
 
   }
 
   const join = () => {
     if (roomId) {
-      router.push(`/${roomId}`);
+      router.push(`/roomId/${roomId}`);
 
     }
     else {
