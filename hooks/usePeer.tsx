@@ -10,7 +10,7 @@ export const usePeer = () => {
     const socket = useSocket();
     const { roomId } = useParams();
     const [peer, setPeer] = useState<Peer | null>(null);
-    const [myId, setMyId] = useState('');
+    const [myPeerId, setMyPeerId] = useState('');
     const isPeerSet = useRef(false);
 
     useEffect(() => {
@@ -26,7 +26,7 @@ export const usePeer = () => {
 
             myPeer.on('open', (id: any) => {
                 console.log('My peer ID is: ' + id);
-                setMyId(id);
+                setMyPeerId(id);
                 console.log(isPeerSet.current);
                 console.log('Emitting join-room with roomId:', roomId, 'and id:', id);
                 socket?.emit("join-room", roomId, id);
@@ -38,6 +38,6 @@ export const usePeer = () => {
 
     }, [roomId, socket]);
 
-    return { peer, myId };
+    return { peer, myPeerId };
 }
 
