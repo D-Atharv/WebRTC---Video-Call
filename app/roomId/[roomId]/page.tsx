@@ -19,6 +19,21 @@ const Room = () => {
     const { peer, myPeerId } = usePeer();
     const { stream } = useMedia();
     const [videoStream, setVideoStream] = useState<VideoStreamType>({});
+    const [micStatus, setMicStatus] = useState(false);
+
+    const toggleMic = () => {
+        setMicStatus(prev => {
+            const newState = !prev;
+            console.log("Toggling mic from:", prev, "to:", newState);
+            if (stream) {
+                const audioTracks = stream.getAudioTracks();
+                audioTracks.forEach(track => {
+                    track.enabled = newState;
+                });
+            }
+            return newState;
+        });
+    };
 
     //handles the event when a new user connects
     useEffect(() => {
@@ -28,17 +43,17 @@ const Room = () => {
         const userConnected = (newUserId: any) => {
             console.log(`Received user-connected event with userId: ${newUserId}`);
 
-            const call = peer.call(newUserId, stream); //sending my stream
+            const call = peer.call(newUserId, stream); // Sending my stream to the new user
             console.log('Calling user with stream');
 
-            call.on("stream", (userVideoStream: any) => {
+            call.on("stream", (userVideoStream: MediaStream) => {
                 console.log(`incoming streaming from other user peerId ${newUserId}`);
 
                 setVideoStream((prev: any) => ({
                     ...prev,
                     [newUserId]: {
-                        url: stream,
-                        muted: false,
+                        url: userVideoStream, // Here we use the incoming user's video stream
+                        muted: micStatus,
                         playing: true
                     }
                 }))
@@ -52,7 +67,7 @@ const Room = () => {
             console.log('Cleaned up first useEffect');
 
         }
-    }, [socket, peer, stream, setVideoStream]);
+    }, [socket, peer, stream, micStatus, setVideoStream]);
 
 
     //a listener for incoming calls when another user calls your peer ID.
@@ -63,15 +78,15 @@ const Room = () => {
         peer.on("call", (call: any) => {
             const { peer: callerId } = call;
             console.log('Incoming call from peerId:', callerId);
-            call.answer(stream);
+            call.answer(stream);// Answering with my stream
 
-            call.on("stream", (userVideoStream: any) => {
+            call.on("stream", (userVideoStream: MediaStream) => {
                 console.log(`incoming streaming from other user peerId ${callerId}`);
                 setVideoStream((prev: any) => ({
                     ...prev,
                     [callerId]: {
-                        url: stream,
-                        muted: false,
+                        url: userVideoStream, // Here we use the incoming user's video stream
+                        muted: micStatus,
                         playing: true
                     }
                 }))
@@ -89,7 +104,7 @@ const Room = () => {
             ...prev,
             [myPeerId]: {
                 url: stream,
-                muted: false,
+                muted: micStatus,
                 playing: true
             }
         }))
@@ -116,7 +131,10 @@ const Room = () => {
                             '/videoOn.svg',
                             '/videOff.svg'
                         ]}
+                        micStatus={micStatus}
+                        toggleMic={toggleMic}
                     />
+
                 </div>
                 <div className="flex flex-col items-center w-full ">
                     <h1 className="text-4xl font-semibold text-center text-white mb-8">Inside Room</h1>
@@ -139,5 +157,6 @@ const Room = () => {
 }
 
 export default Room;
+
 
 
