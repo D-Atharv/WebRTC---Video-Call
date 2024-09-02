@@ -1,12 +1,10 @@
 "use client"
 
 // import { v4 as uuidv4 } from "uuid";
-import TestComponent from "@/components/TestComponent";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import { generatePattern } from "@/utils/generatePattern";
-import SideBar from "@/app/components/SideBar";
 
 
 import 'react-toastify/dist/ReactToastify.css'

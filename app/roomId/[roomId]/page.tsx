@@ -21,7 +21,7 @@ const Room = () => {
     const { stream } = useMedia();
     const [videoStream, setVideoStream] = useState<VideoStreamType>({});
     const [micStatus, setMicStatus] = useState(false);
-    const [videoStatus, setVideoStatus] = useState(true);
+    const [videoStatus, setVideoStatus] = useState(false);
 
     const toggleMic = useCallback(() => {
         setMicStatus(prev => {
@@ -49,6 +49,18 @@ const Room = () => {
             }
             return newState;
         });
+    }, [stream]);
+
+    // Disable audio and video tracks initially
+    useEffect(() => {
+        if (stream) {
+
+            const audioTracks = stream.getAudioTracks();
+            audioTracks.forEach((track) => (track.enabled = false));
+
+            const videoTracks = stream.getVideoTracks();
+            videoTracks.forEach((track) => (track.enabled = false));
+        }
     }, [stream]);
 
     useEffect(() => {
