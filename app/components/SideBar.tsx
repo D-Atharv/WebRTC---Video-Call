@@ -3,13 +3,15 @@ import React from 'react';
 type SideBarProps = {
     iconPaths: string[];
     micStatus: boolean;
+    videoStatus: boolean;
     toggleMic: () => void;
+    toggleVideo: () => void;
 };
 
-const SideBar: React.FC<SideBarProps> = ({ iconPaths, micStatus, toggleMic }) => {
+const SideBar: React.FC<SideBarProps> = React.memo(({ iconPaths, micStatus, videoStatus, toggleMic, toggleVideo }) => {
     const micIcon = micStatus ? iconPaths[0] : iconPaths[1];
-    const videoIcon = iconPaths[2];
-    const videoOffIcon = iconPaths[3];
+    const videoIcon = videoStatus ? iconPaths[2] : iconPaths[3];
+
 
     return (
         <div className="flex items-center justify-center">
@@ -17,12 +19,12 @@ const SideBar: React.FC<SideBarProps> = ({ iconPaths, micStatus, toggleMic }) =>
                 <button onClick={toggleMic} className="mb-8">
                     <img src={micIcon} alt={micStatus ? "Mic On" : "Mic Off"} className="w-6 h-6" />
                 </button>
-                <img src={videoIcon} alt="Video On" className="w-6 h-6 mb-8" />
-                <img src={videoOffIcon} alt="Video Off" className="w-6 h-6" />
+                <button onClick={toggleVideo} className="mb-8">
+                    <img src={videoIcon} alt={videoStatus ? "Video On" : "Video Off"} className="w-6 h-6" />
+                </button>
             </div>
         </div>
     );
-};
+});
 
 export default SideBar;
-
