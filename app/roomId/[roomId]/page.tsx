@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useCallback, memo } from "react";
 import { usePeer } from "@/hooks/usePeer";
 import { useSocket } from "@/context/useSocket";
-import { useMedia } from "@/app/hooks/useMedia";
+import { useMedia } from "@/hooks/useMedia";
 import { VideoPlayer } from "../../components/VideoPlayer";
 import SideBar from "@/app/components/SideBar";
 
@@ -51,6 +51,18 @@ const Room = () => {
         });
     }, [stream]);
 
+
+    // to turn off camera when browser closes
+    const turnOffCameraAudio = () => {
+        const stream = (window as any).cameraStream;
+        if (stream) {
+            stream.getTracks().forEach((track: MediaStreamTrack) => track.stop());
+        }
+    };
+
+    window.addEventListener('beforeunload', turnOffCameraAudio); // to turn off camera and audio
+    window.addEventListener('unload', turnOffCameraAudio);  // to turn off camera and audio
+
     // Disable audio and video tracks initially
     useEffect(() => {
         if (stream) {
@@ -60,6 +72,8 @@ const Room = () => {
 
             const videoTracks = stream.getVideoTracks();
             videoTracks.forEach((track) => (track.enabled = false));
+
+
         }
     }, [stream]);
 
